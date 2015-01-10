@@ -182,7 +182,7 @@ func (this* AA) get_parent(prev *tree.Node)(parent_node **tree.Node) {
         } else {
         parent_node = &prev.Parent.Right
         }
-      } else {
+    } else {
       parent_node = &this.Root
     }
     return
