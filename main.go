@@ -2,6 +2,7 @@ package main
 
 import (
   "fmt"
+  "github.com/bmaxa/trees/avl"
   "github.com/bmaxa/trees/treap"
   "github.com/bmaxa/trees/aa"
   "github.com/bmaxa/trees/rb"
@@ -46,7 +47,7 @@ func (t Key) Less(k tree.Key) bool {
   return t<k.(Key)
 }
 
-func bench(t tree.ITree,rnd1,rnd2[]int,header string) (inser,find,iter,ins,delet int64){
+func bench(t tree.ITree,rnd1,rnd2[]int,header string, prt bool) (inser,find,iter,ins,delet int64){
   fmt.Printf("%s\n--------------------------------\n",header)
   inser = Benchmark(func (b *B) {
   b.N = N
@@ -57,9 +58,11 @@ func bench(t tree.ITree,rnd1,rnd2[]int,header string) (inser,find,iter,ins,delet
     item.Key = Key(k)
     item.Value = N-k
     t.Insert(item)
+//    if prt { fmt.Println("inserting\n",t) }
     t.Delete(Key(rnd2[i]))
   }
   }).NsPerOp()
+//  if prt { fmt.Println(t) }
   find = Benchmark(func (b *B) {
   b.N = N
   b.ResetTimer()
@@ -101,30 +104,38 @@ func bench(t tree.ITree,rnd1,rnd2[]int,header string) (inser,find,iter,ins,delet
     t.Insert(item)
   }
   b.ResetTimer()
+//  if prt { fmt.Println("deleting:\n",t) }
   for _,k := range rnd1 {
     t.Delete(Key(k))
+//    if prt { fmt.Println(t) }
   }
   }).NsPerOp()
+  if prt { fmt.Println(t) }
   return
 }
 
 func main() {
   t := rb.New()
-  rb_inser,rb_find,rb_iter,rb_ins,rb_delet := bench(t,rnd1,rnd2,"Red Black")
+  rb_inser,rb_find,rb_iter,rb_ins,rb_delet := bench(t,rnd1,rnd2,"Red Black",false)
   tt := aa.New()
-  aa_inser,aa_find,aa_iter,aa_ins,aa_delet := bench(tt,rnd1,rnd2,"AA")
+  aa_inser,aa_find,aa_iter,aa_ins,aa_delet := bench(tt,rnd1,rnd2,"AA",false)
   ttt := treap.New(nil)
-  tr_inser,tr_find,tr_iter,tr_ins,tr_delet := bench(ttt,rnd1,rnd2,"Treap")
+  tr_inser,tr_find,tr_iter,tr_ins,tr_delet := bench(ttt,rnd1,rnd2,"Treap",false)
+  tttt := avl.New()
+  avl_inser,avl_find,avl_iter,avl_ins,avl_delet := bench(tttt,rnd1,rnd2,"AVL",true)
   ms := runtime.MemStats{}
   fmt.Printf("Tree\t\tInsert/Erase\tFind\t\tIter\t\tInsert\t\tDelete\n")
+  fmt.Printf("AVL\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",avl_inser,avl_find,avl_iter,avl_ins,avl_delet)
   fmt.Printf("RB\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",rb_inser,rb_find,rb_iter,rb_ins,rb_delet)
   fmt.Printf("AA\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",aa_inser,aa_find,aa_iter,aa_ins,aa_delet)
   fmt.Printf("TR\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",tr_inser,tr_find,tr_iter,tr_ins,tr_delet)
-  rb_inser,rb_find,rb_iter,rb_ins,rb_delet = bench(t,rnd3,rnd2,"Red Black")
-  aa_inser,aa_find,aa_iter,aa_ins,aa_delet = bench(tt,rnd3,rnd2,"AA")
-  tr_inser,tr_find,tr_iter,tr_ins,tr_delet = bench(ttt,rnd3,rnd2,"Treap")
+  rb_inser,rb_find,rb_iter,rb_ins,rb_delet = bench(t,rnd3,rnd2,"Red Black",false)
+  aa_inser,aa_find,aa_iter,aa_ins,aa_delet = bench(tt,rnd3,rnd2,"AA",false)
+  tr_inser,tr_find,tr_iter,tr_ins,tr_delet = bench(ttt,rnd3,rnd2,"Treap",false)
+  avl_inser,avl_find,avl_iter,avl_ins,avl_delet = bench(tttt,rnd3,rnd2,"AVL",true)
   fmt.Println("Ordered Insert")
   fmt.Printf("Tree\t\tInsert/Erase\tFind\t\tIter\t\tInsert\t\tDelete\n")
+  fmt.Printf("AVL\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",avl_inser,avl_find,avl_iter,avl_ins,avl_delet)
   fmt.Printf("RB\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",rb_inser,rb_find,rb_iter,rb_ins,rb_delet)
   fmt.Printf("AA\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",aa_inser,aa_find,aa_iter,aa_ins,aa_delet)
   fmt.Printf("TR\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",tr_inser,tr_find,tr_iter,tr_ins,tr_delet)
