@@ -51,9 +51,10 @@ func (this* AVL) Insert(i tree.Item)(tree.Value,bool) {
   }
   var prev *tree.Node
   var rc *tree.Node
+  var ret bool
   for n := this.Root ; n != nil; {
     prev = n
-    if i.Less(n.Key) {
+    if ret = i.Less(n.Key);ret {
       n = n.Left
     } else {
       rc = n
@@ -67,7 +68,7 @@ func (this* AVL) Insert(i tree.Item)(tree.Value,bool) {
 
   n := NewNode(i)
   this.Size_++
-  if prev.Less(i.Key) {
+  if !ret {
     prev.Right = n
     n.Parent = prev
   } else {
