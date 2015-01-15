@@ -95,20 +95,19 @@ func Weight(n *Node)uint {
 
 func (this* Tree) Height()(rc uint) {
   if this.Size_ == 0 { return 0 }
-  var count uint = 0
-  height(this.Root,0,&rc,&count)
-  rc /= count
+  height(this.Root,0,&rc)
   return
 }
 
-func height(n *Node,d uint,sum,count *uint){
+func height(n *Node,d uint,max *uint){
   if n == nil {
-    *sum+=d
-    *count++
+    if *max < d {
+      *max = d
+    }
     return
   }
-  height(n.Left,d+1,sum,count)
-  height(n.Right,d+1,sum,count)
+  height(n.Left,d+1,max)
+  height(n.Right,d+1,max)
 }
 
 func ToString(n* Node,prefix string,isTail bool,df func(*Node)string)string {
