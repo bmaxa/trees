@@ -197,8 +197,6 @@ func (this* AVL) rotate_right(x *tree.Node) {
 
 func validate(node *Node)bool {
   if node == nil { return true }
-  lh := validate(dc(node.Left))
-  rh := validate(dc(node.Right))
 
   if node.Left != nil && !node.Left.Less(node.Key) {
     return false
@@ -218,6 +216,8 @@ func validate(node *Node)bool {
     fmt.Println("abs(balance factor) > 1",node)
     return false
   }
+  lh := validate(dc(node.Left))
+  rh := validate(dc(node.Right))
   return lh && rh
 }
 

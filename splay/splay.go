@@ -188,8 +188,6 @@ func (this* SPLAY) rotate_right(x *tree.Node) *tree.Node{
 
 func validate(node *Node)bool {
   if node == nil { return true }
-  lh := validate(dc(node.Left))
-  rh := validate(dc(node.Right))
 
   if node.Left != nil && !node.Left.Less(node.Key) {
     return false
@@ -206,6 +204,8 @@ func validate(node *Node)bool {
     return false
   }
 
+  lh := validate(dc(node.Left))
+  rh := validate(dc(node.Right))
   return lh && rh
 }
 
