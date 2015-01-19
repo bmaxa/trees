@@ -13,6 +13,7 @@ import (
   . "testing"
   "runtime"
   "os"
+  "runtime/debug"
   "strconv"
 )
 
@@ -134,6 +135,7 @@ func bench(t tree.ITree,rnd1,rnd2[]int,header string, prt bool) (inser,find,iter
 
 func main() {
   t := rb.New()
+  debug.SetMaxStack(1<<32)
   rb_inser,rb_find,rb_iter,rb_ins,rb_delet := bench(t,rnd1,rnd2,"Red Black",false)
   tt := aa.New()
   aa_inser,aa_find,aa_iter,aa_ins,aa_delet := bench(tt,rnd1,rnd2,"AA",false)
