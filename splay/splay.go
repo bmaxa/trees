@@ -2,7 +2,7 @@ package splay
 
 import (
   "fmt"
-  "github.com/bmaxa/trees/generic"
+  "github.com/bmaxa/trees/tree"
   "unsafe"
 )
 

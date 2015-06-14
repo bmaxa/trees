@@ -7,7 +7,7 @@ import (
   "github.com/bmaxa/trees/aa"
   "github.com/bmaxa/trees/rb"
   "github.com/bmaxa/trees/splay"
-  "github.com/bmaxa/trees/generic"
+  "github.com/bmaxa/trees/tree"
   "math/rand"
   "time"
   . "testing"

@@ -4,7 +4,7 @@ import (
   "fmt"
   "math/rand"
   "time"
-  "github.com/bmaxa/trees/generic"
+  "github.com/bmaxa/trees/tree"
   "unsafe"
 )
 
