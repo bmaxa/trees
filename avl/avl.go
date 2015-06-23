@@ -64,8 +64,8 @@ func (this* AVL) Insert(i tree.Item)(tree.Value,bool) {
 
   if rc != nil && !rc.Less(i.Key) {
     return rc.Value,false
-  }  
-
+  }
+  
   n := NewNode(i)
   this.Size_++
   if !ret {
@@ -82,11 +82,54 @@ func (this* AVL) Insert(i tree.Item)(tree.Value,bool) {
   return n.Value,true
 }
 
+func (this* AVL) InsertEqual(i tree.Item)(tree.Value) {
+  if this.Root == nil {
+    this.Root = NewNode(i)
+    this.Size_++
+    return this.Root.Value
+  }
+  var prev *tree.Node
+  var ret bool
+  for n := this.Root ; n != nil; {
+    prev = n
+    if ret = i.Less(n.Key);ret {
+      n = n.Left
+    } else {
+      n = n.Right
+    }
+  }
+
+  n := NewNode(i)
+  this.Size_++
+  if !ret {
+    prev.Right = n
+    n.Parent = prev
+  } else {
+    prev.Left = n
+    n.Parent = prev
+  }
+  
+  for nn := prev;nn != nil ; nn = nn.Parent {
+    this.balance(nn)
+  }
+  return n.Value
+}
+
 func (this* AVL) Delete(k tree.Key)bool {
   n := this.Find(k).Node()
   if n == nil {
     return false
   } 
+  this.delete(n)
+  return true
+}
+
+func (this* AVL) DeleteIter(i tree.Iterator)bool {
+  n := i.Node()
+  if n == nil {
+    return false
+  }
+  
   this.delete(n)
   return true
 }

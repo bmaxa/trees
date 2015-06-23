@@ -14,6 +14,13 @@ type ITree interface {
   End()Iterator
 }
 
+type IMulTree interface {
+  ITree
+  InsertEqual(Item)Value
+  FindEqual(Key)(begin,end Iterator)
+  DeleteIter(Iterator)bool
+}
+
 type Tree struct {
   Root *Node
   Size_ uint
@@ -60,6 +67,20 @@ func (this* Tree) Find(k Key) (rc Iterator) {
   }
   return
 }
+
+func (this* Tree) FindEqual(k Key) (begin,end Iterator) {
+  end = this.Find(k)
+  if end == this.End() {
+    begin = end
+    return
+  }
+  for begin = end;begin != this.End() && begin.Prev() != this.End() && !begin.Prev().Node().Less(k); {
+    begin = begin.Prev()
+  }
+  end = end.Next()
+  return
+}
+
 
 func (this* Tree) Begin()Iterator {
   rc := (*Node)(nil)
