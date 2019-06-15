@@ -254,10 +254,11 @@ func (this* SPLAY) Find(k tree.Key) (rc tree.Iterator) {
     this.splay(tmp)
     return
   }
-  this.splay(prev)
+  if prev != nil { this.splay(prev) }
   return
 }
 func (this* SPLAY) splay(n *tree.Node) {
+    if n == nil { panic("Splay called with nil!") }
   for n.Parent != nil {
     if n.Parent.Parent == nil {
       if n.Parent.Left == n {
